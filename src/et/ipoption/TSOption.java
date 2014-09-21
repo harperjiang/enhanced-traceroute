@@ -17,7 +17,7 @@ public class TSOption extends IPOption {
 	public TSOption(int length) {
 		super(new byte[length]);
 		setOption(IPOption.Timestamp);
-		setLength(40);
+		setLength(length);
 	}
 
 	public int getLength() {
