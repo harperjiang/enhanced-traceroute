@@ -19,14 +19,17 @@ public class Timestamp {
 		socket.open(RawSocket.PF_INET, RawSocket.getProtocolByName("tcp"));
 		socket.setIPHeaderInclude(true);
 
-		int ttllen = 60;
+		String src = args[0];
+		String dest = args[1];
+
+		int ttllen = 100;
 
 		ETCPPacket syn = new ETCPPacket(ttllen);
 
 		// Set IP Packet info
 
 		syn.setIPVersion(4);
-		syn.setIPHeaderLength(5);
+		syn.setIPHeaderLength(15);
 		syn.setIPPacketLength(ttllen);
 		syn.setTypeOfService(0);
 		syn.setIdentification(4232);
@@ -36,8 +39,8 @@ public class Timestamp {
 		syn.setTTL(30);
 		syn.setProtocol(RawSocket.getProtocolByName("tcp"));
 
-		syn.setSourceAsWord(IPUtils.ipAsWord("128.153.23.179"));
-		syn.setDestinationAsWord(IPUtils.ipAsWord("54.187.60.48"));
+		syn.setSourceAsWord(IPUtils.ipAsWord(src));
+		syn.setDestinationAsWord(IPUtils.ipAsWord(dest));
 
 		// TSOption option = new TSOption(24);
 		// option.setFlag(TSOption.FLAG_TS_WITHIP);
@@ -71,15 +74,14 @@ public class Timestamp {
 
 		byte[] data = new byte[ttllen];
 		syn.getData(data);
-		socket.write(InetAddress.getByName("54.187.60.48"), data);
+		socket.write(InetAddress.getByName(src), data);
 
 		byte[] receiveData = new byte[ttllen];
 
 		TCPPacket receivePacket = new TCPPacket(ttllen);
 		receivePacket.setData(receiveData);
 
-		socket.read(receiveData,
-				DataUtils.intToWord(IPUtils.ipAsWord("54.187.60.48")));
+		socket.read(receiveData, DataUtils.intToWord(IPUtils.ipAsWord(dest)));
 
 		System.out.println(receivePacket.getAckNumber());
 	}
