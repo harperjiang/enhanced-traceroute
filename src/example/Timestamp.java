@@ -8,7 +8,6 @@ import com.savarese.rocksaw.net.RawSocket;
 
 import et.ETCPPacket;
 import et.IPUtils;
-import et.ipoption.RROption;
 import et.ipoption.TSOption;
 import et.tcpoption.TCPOption;
 
